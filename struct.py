@@ -39,7 +39,7 @@ class Node:
         if root:
             res = self.postOrderTraversal(root.left)
             res = res + self.postOrderTraversal(root.right)
-            res.append(root.data)
+            res.append(root)
         return res
 
 # Tests
