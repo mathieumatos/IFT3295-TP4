@@ -56,7 +56,7 @@ def isLeaf(node):
 def getBipartitions(node):
 
     allLeafs = getLeafs(node)
-    print("ALL LEAFS : "+str(allLeafs))
+    # print("ALL LEAFS : "+str(allLeafs))
     bipartitions = []
 
     for nd in node.postOrderTraversal(node):
@@ -73,9 +73,9 @@ def getBipartitions(node):
 
         if(not len(notLeafs) <= 1):
             bipartitions.append([sorted(allLeafs),sorted(notLeafs)])
-            print("ADDED BIPARTITION "+str([sorted(allLeafs),sorted(notLeafs)]))
-    print("ALL BIPARTITIONS : "+str(bipartitions))
-    print("BIPARTITIONS LEN : "+str(len(bipartitions)))
+            # print("ADDED BIPARTITION "+str([sorted(allLeafs),sorted(notLeafs)]))
+    # print("ALL BIPARTITIONS : "+str(bipartitions))
+    # print("BIPARTITIONS LEN : "+str(len(bipartitions)))
     return bipartitions
 
 
