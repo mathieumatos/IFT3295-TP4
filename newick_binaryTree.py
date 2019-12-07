@@ -92,11 +92,11 @@ def robinson_foulds(bipartition1,bipartition2):
 
 
 # Tests
-str1 = "(((PCDHA1_Humain, PCDHA1_Rat), (PCDHA1_Souris, PCDHA1_Bonobo)), OR2J3_Humain);"
-str2 = "(((OR2J3_Humain, PCDHA1_Rat), (PCDHA1_Souris, PCDHA1_Bonobo)), PCDHA1_Humain);"
+# str1 = "(((PCDHA1_Humain, PCDHA1_Rat), (PCDHA1_Souris, PCDHA1_Bonobo)), OR2J3_Humain);"
+# str2 = "(((OR2J3_Humain, PCDHA1_Rat), (PCDHA1_Souris, PCDHA1_Bonobo)), PCDHA1_Humain);"
 
-tree = treeBuilder(str1)
-tree2 = treeBuilder(str2)
+# tree = treeBuilder(str1)
+# tree2 = treeBuilder(str2)
 
-print("RF : "+str(robinson_foulds(getBipartitions(tree),getBipartitions(tree2))))
+# print("RF : "+str(robinson_foulds(getBipartitions(tree),getBipartitions(tree2))))
 

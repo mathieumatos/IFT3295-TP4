@@ -95,22 +95,6 @@ def proteinKeyToValue_NewickList(nwList, dictionary):
     return nwList
 
 
-""" CODE QUE NICO A AJOUTÉ """
-
-seqs = ["INDNPPVFRGREQIIFIPESSRFPIEDADIGANALLTYTLELSKSLWLELRKYLDREETPELHLLLTATDGGKPELQGTVELLITVLDVNDNAPLFDQAVYRVHLL"
-        "ETLVTTLNASDADEGVNGEVVFSFDSGISRDFKVDSSSGEIRLIDKLKVLDVNDNAPELAVTSLYLPIREDAPLSTVIALITVSRDSGANGQVTCSLMPHVPFKLVS",
-        "MNDDGKVNASSEGYFILVGFSNWPHLEVVIFVVVLIFYLMTLIGNLFIIILSYLDSHLHTPMYFFLSYTTSSIPQYAGCMIVLLVVMSYDRYAAVCRPLHYTVLMH"
-        "PRFCHLLAVASWVSGFTNSSSFTFWVPLCGHRQVDHFFCEVPALLRLSCVDTHVNELTLMITSSIFVIPLILILTAIRAVLRMQSTTGLFGTCGAHLMAVSLFFIVT",
-        "INDNPPIFKGSEQRIFIPENSRFPLEDADIGANSLLTYTLELSKSLSLELRKSLDREETPELQLLLTATDGGKPELEGAVRLQITVLDVNDNAPVFDQAVYRAQLT"
-        "ESLVTTLNATDADEGVNGEVVFSFGNDVSPDFKVDSISGEIRVIGDLKVLDVNDNVPELMITSLSLPIKEDAPLNTVVALIKVSIDSGVNGQVTCSLSPHLPFKLVS",
-        "INDNPPVFKGAEQRIFIPENSRFPLEDADIGANSLLTYTLELSKSLSLELRKSLDREETPELQLLLTATDGGKPELEGTVRLQITVLDVNDNAPLFDQAIYRAQLV"
-        "ESLVTTLNATDADEGVNGEVVFSFGNDVSLDFNVDSLSGEIRVIGDLKVLDINDNAPELSITSLSLPIKEDTPLNTIIALIKVSIDSGVNGQVTCSLTPHVPFKLVS",
-        "INDNPPVFRGREQIIFIPESSRFPIEDADIGANALLTYTLELSKSLWLELRKSLDREETPELHLLLTATDGGKPELQGTVELLITVLDVNDNAPLFDQAVYRVLLL"
-        "ETLMTTLNASDADEGVNGEVVFSFDSGISRDFKVDSSSGEIRLIDKLKVLDVNDNAPELAVTSLYLPIREDAPLSTVIALITVSRDSGANGQVTCSLMPHVPFKLVS"]
-
-weight = "BLOSUM62.txt"
-
-
 # Calculates distance matrix of sequences
 def getDistanceMatrix(seqs, weight):
     weightDict = {}
@@ -146,6 +130,7 @@ def calculateD(seqi, seqj, header, dict):
 
 # Neighbor-Joining algorithm
 def neighborJoining(matrix, seqs, newNJNode):
+    tree = struct.Node(1)
     nicePrint(matrix, "\nItération : " + str(newNJNode))
     if len(seqs) == 2:
         #node = struct.Node(newNJNode)
@@ -156,15 +141,15 @@ def neighborJoining(matrix, seqs, newNJNode):
         print(max(seqs[0], seqs[1]))
         #node.right = max(seqs[0], seqs[1])
         print("\n --------  Fin de Neighbor-Joining  -------- ")
-        return tree
+        return
     #totalDistances = getTotalDistances(matrix)
     mini, minj = findMinimum(matrix)
     #limbLengthi = 0.5 * (matrix[mini][minj] + (totalDistances[mini] - totalDistances[minj]) / (len(seqs)-2))
     #limbLengthj = matrix[mini][minj] - limbLengthi
-    #node = struct.Node(newNJNode)
+    node = struct.Node(newNJNode)
     print("Créer noeud ayant pour enfant gauche : " + str(min(mini, minj)))
     print(seqs[min(mini, minj)])
-    #node.left = seqs[min(mini, minj)]
+    node.left = seqs[min(mini, minj)]
     #leaves[mini].data = limbLengthi
     print("et pour enfant droit : " + str(max(mini, minj)))
     print(seqs[max(mini, minj)])
@@ -248,17 +233,7 @@ def nicePrint(matrix, title):
     return
 
 
-# q2.1
-distMat = getDistanceMatrix(seqs, weight)
-nicePrint(distMat, "Matrice de distance")
-# q2.2
-leaves = createLeaves(seqs)
-tree = leaves
-print("\n --------  Début de Neighbor-Joining  -------- ")
-neighborJoining(distMat, seqs, 1)
 # Tests
-
-""" FIN DU CODE QUE NICO A AJOUTÉ """
 
 """ Gestion des proteines: Creation de dictionaire sans gaps """
 proteines = readFastaFile("proteines.fasta")
@@ -279,6 +254,23 @@ arbres = readNewickFile("arbres.nw")
 # print(arbres)
 arbresProteines = proteinKeyToValue_NewickList(arbres,proteinesDictionary)
 # print(arbresProteines)
+print("Alignement filtre sans gaps :")
+print(proteinesDictionary)
+print()
+
+print("Trouver le RF entre l'arbre de la seq1 sans gap et l'arbre de la seq2 sans gap :")
+print("RF : "+str(newick_binaryTree.robinson_foulds(newick_binaryTree.getBipartitions(newick_binaryTree.treeBuilder(arbresProteines[0])),newick_binaryTree.getBipartitions(newick_binaryTree.treeBuilder(arbresProteines[1])))))
+print()
+
+# q2.1
+weight = "BLOSUM62.txt"
+distMat = getDistanceMatrix(noGapProteinesValues, weight)
+nicePrint(distMat, "Matrice de distance")
+# q2.2
+# leaves = createLeaves(noGapProteinesValues)
+# tree = leaves
+print("\n --------  Début de Neighbor-Joining  -------- ")
+neighborJoining(distMat, noGapProteinesValues, 1)
 
 
 
