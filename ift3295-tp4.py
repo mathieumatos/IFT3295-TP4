@@ -114,7 +114,6 @@ weight = "BLOSUM62.txt"
 # Calculates distance matrix of sequences
 def getDistanceMatrix(seqs, weight):
     weightDict = {}
-    weightHead = []
     file = open(weight, "r")
     line = file.readline()
     weightHead = line.split()[1:]
@@ -147,23 +146,31 @@ def calculateD(seqi, seqj, header, dict):
 
 # Neighbor-Joining algorithm
 def neighborJoining(matrix, seqs, newNJNode):
-    print(matrix)
+    nicePrint(matrix, "\nItération : " + str(newNJNode))
     if len(seqs) == 2:
-        print("Creer noeud ayant pour enfant gauche : " + str(min(seqs[0], seqs[1])))
+        #node = struct.Node(newNJNode)
+        print("Créer noeud ayant pour enfant gauche : " + str(0))
         print(min(seqs[0], seqs[1]))
-        print("et pour enfant droit : " + str(max(seqs[0], seqs[1])))
-        print("Fin de Neighbor-Joining")
-        return
-    totalDistances = getTotalDistances(matrix)
-    njMatrix = getNJMatrix(matrix, totalDistances)
-    #mini, minj = findMinimum(njMatrix)
+        #node.left = min(seqs[0], seqs[1])
+        print("et pour enfant droit : " + str(1))
+        print(max(seqs[0], seqs[1]))
+        #node.right = max(seqs[0], seqs[1])
+        print("\n --------  Fin de Neighbor-Joining  -------- ")
+        return tree
+    #totalDistances = getTotalDistances(matrix)
     mini, minj = findMinimum(matrix)
-    limbLengthi = 0.5 * (matrix[mini][minj] + (totalDistances[mini] - totalDistances[minj]) / (len(seqs)-2))
-    limbLengthj = matrix[mini][minj] - limbLengthi
-    print("Creer noeud ayant pour enfant gauche : " + str(min(mini, minj)))
+    #limbLengthi = 0.5 * (matrix[mini][minj] + (totalDistances[mini] - totalDistances[minj]) / (len(seqs)-2))
+    #limbLengthj = matrix[mini][minj] - limbLengthi
+    #node = struct.Node(newNJNode)
+    print("Créer noeud ayant pour enfant gauche : " + str(min(mini, minj)))
     print(seqs[min(mini, minj)])
+    #node.left = seqs[min(mini, minj)]
+    #leaves[mini].data = limbLengthi
     print("et pour enfant droit : " + str(max(mini, minj)))
     print(seqs[max(mini, minj)])
+    #node.right = (seqs[max(mini, minj)])
+    #leaves[minj].data = limbLengthj
+    #tree.append(node)
     newMatrix, newSeqs, newNJNode = createNewNJ(matrix, seqs, mini, minj, newNJNode)
     return neighborJoining(newMatrix, newSeqs, newNJNode)
 
@@ -219,10 +226,35 @@ def createNewNJ(matrix, seqs, indexi, indexj, newNJNode):
     return newMatrix, seqs, newNJNode
 
 
+# Creates an array containing all the original leaves
+def createLeaves(array):
+    leaves = []
+    for i in range(len(array)):
+        leaves.append(struct.Node(0))
+    return leaves
+
+
+def nicePrint(matrix, title):
+    print(title)
+    newMatrix = []
+    for i in range(len(matrix)):
+        newLine = []
+        for j in range(len(matrix[0])):
+            newLine.append(float("{0:.3f}".format(matrix[i][j])))
+        newMatrix.append(newLine)
+    for line in newMatrix:
+        print(line)
+    print(" ")
+    return
+
+
 # q2.1
 distMat = getDistanceMatrix(seqs, weight)
-#print(distMat)
+nicePrint(distMat, "Matrice de distance")
 # q2.2
+leaves = createLeaves(seqs)
+tree = leaves
+print("\n --------  Début de Neighbor-Joining  -------- ")
 neighborJoining(distMat, seqs, 1)
 # Tests
 
